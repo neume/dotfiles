@@ -16,3 +16,8 @@ This is for your `.tmux.conf` file
 ```
 source-file $HOME/path/to/your/cloned/dotfiles/tmux/tmux.conf
 ```
+
+
+## Preview
+
+![vim-preview](images/vim-preview.png)
