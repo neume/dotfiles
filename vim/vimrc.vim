@@ -9,7 +9,6 @@ Plugin 'VundleVim/Vundle.vim'
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
 Plugin 'vim-airline/vim-airline'
 Plugin 'vim-airline/vim-airline-themes'
-Plugin 'dracula/vim', { 'name': 'dracula' }
 Plugin 'preservim/nerdtree'
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'jiangmiao/auto-pairs'
@@ -19,7 +18,6 @@ Plugin 'thoughtbot/vim-rspec'
 Plugin 'itmammoth/run-rspec.vim'
 Plugin 'joshdick/onedark.vim'
 Plugin 'sheerun/vim-polyglot'
-Plugin 'sainnhe/sonokai'
 Plugin 'airblade/vim-gitgutter'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'vim-ruby/vim-ruby'
@@ -28,19 +26,22 @@ Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-fugitive'
 Plugin 'vim-scripts/AutoComplPop'
 Plugin 'tpope/vim-surround'
+Plugin 'mattn/emmet-vim'
 "Plugin 'killphi/vim-legend'
 "Plugin 'nyarly/cadre'
+Plugin 'christoomey/vim-tmux-navigator'
+Plugin 'MarcWeber/vim-addon-mw-utils'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+" Plugin 'benmills/vimux'
+Plugin 'slarwise/vim-tmux-send'
+Plugin 'mhinz/vim-startify'
 call vundle#end()
 
 filetype plugin on
 syntax enable
-"colorscheme dracula
 
-let g:onedark_termcolors = 256
-let g:airline_theme='onedark'
-colorscheme onedark
-
-"set background=dark
 set number relativenumber
 set list
 set listchars=tab:>-
@@ -53,10 +54,8 @@ augroup numbertoggle
   autocmd BufLeave,FocusLost,InsertEnter,WinLeave   * if &nu | set nornu | endif
 augroup END
 
-set t_Co=256
-"let &t_Co=256
+"set t_Co=256
 let g:airline_powerline_fonts = 1
-"syntax enable
 
 set backspace=indent,eol,start
 
@@ -78,8 +77,11 @@ set shiftwidth=2
 if has ("autocmd")
   filetype indent on
 endif
-"
-set tags^=./.git/tags;
+
+set nowrap
+set colorcolumn=80
+
+"set tags^=./.git/tags;
 " let g:fzf_preview_window = 'right:60%'
 
 set cursorline
@@ -118,28 +120,6 @@ let g:run_rspec_bin = 'bundle exec rspec'
 nnoremap <leader>f :FZF<CR>
 
 nnoremap <leader>ct :!ctags -R --languages=ruby --exclude=.git --exclude=log --exclude=tmp .<CR>
-"let g:onedark_termcolors=256
-
-"highlight Normal ctermbg=NONE
-"highlight nonText ctermbg=NONE
-
-"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
-"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
-"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
-if (empty($TMUX))
-  if (has("nvim"))
-    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
-    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-  endif
-  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
-  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
-  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
-  "if (has("termguicolors"))
-    "set termguicolors
-  "endif
-else
-  set termguicolors
-endif
 set encoding=UTF-8
 
 " Git mappings
@@ -151,3 +131,33 @@ nnoremap <leader>gc :Gcommit<CR>
 nnoremap <leader>ws :split<CR>
 nnoremap <leader>wv :split<CR>
 
+" Open dotfiles vim
+nnoremap <leader>vc :split ~/dotfiles/vim/vimrc.vim<CR>
+
+" Emmet leader key
+let g:user_emmet_leader_key=','
+
+" Set esc timeout to zero
+set timeoutlen=1000 ttimeoutlen=0
+
+
+" Vim tmux mappings
+nnoremap <LEADER>sm :SendMakeCmd<CR>
+nnoremap <LEADER>ss :SendLine<CR>j
+nnoremap <LEADER>s :set operatorfunc=SendSelection<CR>g@
+
+"nnoremap <C-h> :wincmd h<CR>
+"nnoremap <C-j> :wincmd j<CR>
+"nnoremap <C-k> :wincmd k<CR>
+"nnoremap <C-l> :wincmd l<CR>
+if $TERM_PROGRAM != "Apple_Terminal"
+  if has('termguicolors')
+    set termguicolors
+    let g:onedark_termcolors = 256
+  endif
+endif
+
+colorscheme onedark
+
+let g:airline_theme='onedark'
+set diffopt+=vertical
