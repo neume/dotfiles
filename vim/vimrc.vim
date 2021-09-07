@@ -12,38 +12,51 @@ Plugin 'preservim/nerdtree'
 Plugin 'ryanoasis/vim-devicons'
 Plugin 'vwxyutarooo/nerdtree-devicons-syntax'
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plugin 'junegunn/fzf.vim'
 Plugin 'jiangmiao/auto-pairs'
-Plugin 'slim-template/vim-slim.git'
+" Plugin 'slim-template/vim-slim.git'
 Plugin 'dense-analysis/ale'
-Plugin 'thoughtbot/vim-rspec'
+" Plugin 'thoughtbot/vim-rspec'
 Plugin 'itmammoth/run-rspec.vim'
 Plugin 'joshdick/onedark.vim'
-Plugin 'sheerun/vim-polyglot'
 " Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-signify'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-rails'
 Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-fugitive'
-Plugin 'vim-scripts/AutoComplPop'
+" Plugin 'vim-scripts/AutoComplPop' " Causes ruby error
 Plugin 'tpope/vim-surround'
 Plugin 'mattn/emmet-vim'
 Plugin 'christoomey/vim-tmux-navigator'
 Plugin 'MarcWeber/vim-addon-mw-utils'
-Plugin 'tomtom/tlib_vim'
-Plugin 'garbas/vim-snipmate'
-Plugin 'honza/vim-snippets'
+" Plugin 'tomtom/tlib_vim'
+" Plugin 'garbas/vim-snipmate'
+" Plugin 'honza/vim-snippets'
 " Plugin 'benmills/vimux'
-Plugin 'slarwise/vim-tmux-send'
-Plugin 'mhinz/vim-startify'
+" Plugin 'slarwise/vim-tmux-send'
+" Plugin 'mhinz/vim-startify'
 Plugin 'dyng/ctrlsf.vim'
 Plugin 'ngmy/vim-rubocop'
-Plugin 'haya14busa/incsearch.vim'
+" Plugin 'haya14busa/incsearch.vim'
 Plugin 'tpope/vim-commentary'
-Plugin 'tpope/vim-eunuch'
-Plugin 'dhruvasagar/vim-table-mode'
-Plugin 'tpope/vim-repeat'
-Plugin 'kylef/apiblueprint.vim'
+" Plugin 'tpope/vim-eunuch'
+" Plugin 'dhruvasagar/vim-table-mode'
+" Plugin 'tpope/vim-repeat'
+" Plugin 'kylef/apiblueprint.vim'
+" Plugin 'preservim/vimux'
+" Plugin 'itchyny/calendar.vim'
+" Plugin 'MaxMEllon/vim-jsx-pretty'
+Plugin 'sheerun/vim-polyglot'
+Plugin 'pangloss/vim-javascript'
+" Plugin 'othree/yajs.vim'
+" Plugin 'elzr/vim-json'
+" Plugin 'jelera/vim-javascript-syntax'
+" Plugin 'yuezk/vim-js'
+
+" Plugin 'Valloric/MatchTagAlways'
+" Plugin 'jaxbot/semantic-highlight.vim'
+Plugin 'gregsexton/matchtag'
 call vundle#end()
 
 filetype plugin on
@@ -85,8 +98,11 @@ if has ("autocmd")
   filetype indent on
 endif
 
-set nowrap
-set colorcolumn=80
+set wrap
+set colorcolumn=120
+
+"Enable mouse
+set mouse=a
 
 "set tags^=./.git/tags;
 " let g:fzf_preview_window = 'right:60%'
@@ -94,12 +110,19 @@ set colorcolumn=80
 set cursorline
 
 let g:ale_linters = {
-      \   'ruby': ['rubocop']
+      \   'ruby': ['rubocop'],
+      \   'javascript': ['eslint'],
       \ }
+let g:ale_fixers= {
+      \   'javascript': ['prettier', 'eslint'],
+      \ }
+
 let g:ale_sign_error = '✘'
 let g:ale_sign_warning = '⚠'
 let g:ale_linters_explicit = 1
 let g:airline#extensions#ale#enabled = 1
+let g:ale_ruby_rubocop_executable = 'bundle'
+let g:ale_ruby_brakeman_executable = 'bundle'
 autocmd StdinReadPre * let s:std_in=1
 "autocmd VimEnter * if argc() == 1 && isdirectory(argv()[0]) && !exists("s:std_in") | exe 'NERDTree' argv()[0] | wincmd p | ene | exe 'cd '.argv()[0] | endif
 
@@ -181,7 +204,7 @@ let g:snipMate.scope_aliases = {}
 let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'
 
 " NerdTree
-nnoremap ,n :NERDTreeFind<CR>
+nnoremap nf :NERDTreeFind<CR>
 
 " Fugitive
 nnoremap <leader>gd :Gdiffsplit!<CR>
@@ -198,3 +221,20 @@ nnoremap <leader>tp :tabprevious<CR>
 
 nnoremap <leader>sr :split<CR>:A<CR>
 nnoremap <leader>z :tabnew %<CR><C-o>
+
+nnoremap <Leader>vl :call VimuxRunCommand("clear; bundle exec rspec " . bufname("%"))<CR>
+map <leader>vi :VimuxInspectRunner<cr></cr></leader>
+if $PATH !~ "\.rbenv"
+  let $PATH="/home/username/.rbenv/shims:/home/username/.rbenv/bin:" . $PATH
+endif
+let g:vimrubocop_rubocop_cmd = 'rbenv exec bundle exec rubocop'
+
+set clipboard=unnamed
+nnoremap <leader>gv :!git view<CR>
+" let g:ale_ruby_rubocop_executable = 'bundle'
+" let g:ale_ruby_brakeman_executable = 'bundle'
+nmap <leader>cr :RuboCop<cr>
+nmap <silent> <leader>cn :ALENext<cr>
+nmap <silent> <leader>cp :ALEPrevious<cr>
+nnoremap <leader>wf :CtrlSF
+nnoremap <leader>d :ALEFix<cr>
