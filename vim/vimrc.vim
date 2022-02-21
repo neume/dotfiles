@@ -13,12 +13,13 @@ Plugin 'ryanoasis/vim-devicons'
 Plugin 'vwxyutarooo/nerdtree-devicons-syntax'
 Plugin 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plugin 'junegunn/fzf.vim'
-Plugin 'jiangmiao/auto-pairs'
+" Plugin 'jiangmiao/auto-pairs'
 " Plugin 'slim-template/vim-slim.git'
 Plugin 'dense-analysis/ale'
 " Plugin 'thoughtbot/vim-rspec'
 Plugin 'itmammoth/run-rspec.vim'
-Plugin 'joshdick/onedark.vim'
+" Plugin 'joshdick/onedark.vim'
+Plugin 'morhetz/gruvbox'
 " Plugin 'airblade/vim-gitgutter'
 Plugin 'vim-signify'
 Plugin 'vim-ruby/vim-ruby'
@@ -41,7 +42,7 @@ Plugin 'ngmy/vim-rubocop'
 " Plugin 'haya14busa/incsearch.vim'
 Plugin 'tpope/vim-commentary'
 " Plugin 'tpope/vim-eunuch'
-" Plugin 'dhruvasagar/vim-table-mode'
+Plugin 'dhruvasagar/vim-table-mode'
 " Plugin 'tpope/vim-repeat'
 " Plugin 'kylef/apiblueprint.vim'
 " Plugin 'preservim/vimux'
@@ -158,7 +159,7 @@ nnoremap <leader>ct :!ctags -R --languages=ruby --exclude=.git --exclude=log --e
 set encoding=UTF-8
 
 " Git mappings
-nnoremap <leader>gs :Gstatus<CR>
+nnoremap <leader>gs :Git<CR>
 nnoremap <leader>gc :Gcommit<CR>
 
 " Open dotfiles vim
@@ -187,9 +188,10 @@ if $TERM_PROGRAM != "Apple_Terminal"
   endif
 endif
 
-colorscheme onedark
+colorscheme gruvbox
+set background=dark
 
-let g:airline_theme='onedark'
+let g:airline_theme='gruvbox'
 let g:airline#extensions#hunks#enabled = 0
 set diffopt+=vertical
 
@@ -229,6 +231,23 @@ if $PATH !~ "\.rbenv"
 endif
 let g:vimrubocop_rubocop_cmd = 'rbenv exec bundle exec rubocop'
 
+" Nerdtree tmux config
+" This allows tmux navigation on nerd tree window
+let g:NERDTreeMapJumpPrevSibling=""
+let g:NERDTreeMapJumpNextSibling=""
+
+" WSL yank support for Ubuntu on WSL
+if $WSL_DISTRO_NAME == 'Ubuntu-20.04'
+  let s:clip = '/mnt/c/Windows/System32/clip.exe'  " change this path according to your mount point
+  if executable(s:clip)
+      augroup WSLYank
+          autocmd!
+          autocmd TextYankPost * if v:event.operator ==# 'y' | call system(s:clip, @0) | endif
+      augroup END
+  endif
+endif
+
+
 set clipboard=unnamed
 nnoremap <leader>gv :!git view<CR>
 " let g:ale_ruby_rubocop_executable = 'bundle'
@@ -238,3 +257,4 @@ nmap <silent> <leader>cn :ALENext<cr>
 nmap <silent> <leader>cp :ALEPrevious<cr>
 nnoremap <leader>wf :CtrlSF
 nnoremap <leader>d :ALEFix<cr>
+
