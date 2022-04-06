@@ -24,24 +24,28 @@ Plugin 'morhetz/gruvbox'
 Plugin 'vim-signify'
 Plugin 'vim-ruby/vim-ruby'
 Plugin 'tpope/vim-rails'
+Plugin 'kremso/vim-spectator'
 Plugin 'mileszs/ack.vim'
 Plugin 'tpope/vim-fugitive'
-" Plugin 'vim-scripts/AutoComplPop' " Causes ruby error
+Plugin 'vim-scripts/AutoComplPop' " Causes ruby error
 Plugin 'tpope/vim-surround'
 Plugin 'mattn/emmet-vim'
 Plugin 'christoomey/vim-tmux-navigator'
+
+" Snipmate
 Plugin 'MarcWeber/vim-addon-mw-utils'
-" Plugin 'tomtom/tlib_vim'
-" Plugin 'garbas/vim-snipmate'
-" Plugin 'honza/vim-snippets'
+Plugin 'tomtom/tlib_vim'
+Plugin 'garbas/vim-snipmate'
+Plugin 'honza/vim-snippets'
+
 " Plugin 'benmills/vimux'
 " Plugin 'slarwise/vim-tmux-send'
-" Plugin 'mhinz/vim-startify'
+Plugin 'mhinz/vim-startify'
 Plugin 'dyng/ctrlsf.vim'
 Plugin 'ngmy/vim-rubocop'
 " Plugin 'haya14busa/incsearch.vim'
 Plugin 'tpope/vim-commentary'
-" Plugin 'tpope/vim-eunuch'
+Plugin 'tpope/vim-eunuch'
 Plugin 'dhruvasagar/vim-table-mode'
 " Plugin 'tpope/vim-repeat'
 " Plugin 'kylef/apiblueprint.vim'
@@ -58,15 +62,16 @@ Plugin 'pangloss/vim-javascript'
 " Plugin 'Valloric/MatchTagAlways'
 " Plugin 'jaxbot/semantic-highlight.vim'
 Plugin 'gregsexton/matchtag'
+Plugin 'ecomba/vim-ruby-refactoring'
 call vundle#end()
 
 filetype plugin on
 syntax enable
 
 set number relativenumber
-set list
-set listchars=tab:>-
-set listchars+=space:·
+" set list
+" set listchars=tab:>-
+" set listchars+=space:·
 
 augroup numbertoggle
   autocmd!
@@ -109,6 +114,7 @@ set mouse=a
 " let g:fzf_preview_window = 'right:60%'
 
 set cursorline
+set cursorcolumn
 
 let g:ale_linters = {
       \   'ruby': ['rubocop'],
@@ -206,7 +212,8 @@ let g:snipMate.scope_aliases = {}
 let g:snipMate.scope_aliases['ruby'] = 'ruby,rails'
 
 " NerdTree
-nnoremap nf :NERDTreeFind<CR>
+nnoremap <leader>nf :NERDTreeFind<CR>
+nnoremap <leader>nt :NERDTree<CR>
 
 " Fugitive
 nnoremap <leader>gd :Gdiffsplit!<CR>
@@ -257,4 +264,24 @@ nmap <silent> <leader>cn :ALENext<cr>
 nmap <silent> <leader>cp :ALEPrevious<cr>
 nnoremap <leader>wf :CtrlSF
 nnoremap <leader>d :ALEFix<cr>
+
+" Close html tag
+imap ,/ </<C-X><C-O>
+
+let $FZF_DEFAULT_COMMAND='find . \( -name node_modules -o -name .git -name tmp \) -prune -o -print'
+
+let g:snipMate = { 'snippet_version' : 1 }
+
+let g:rails_projections = {
+      \ "app/controllers/*_controller.rb": {
+      \   "test": [
+      \     "spec/controllers/{}_controller_spec.rb",
+      \     "spec/requests/{}_spec.rb"
+      \   ],
+      \ },
+      \ "spec/requests/*_spec.rb": {
+      \   "alternate": [
+      \     "app/controllers/{}_controller.rb",
+      \   ],
+      \ }}
 
