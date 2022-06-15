@@ -63,15 +63,17 @@ Plugin 'pangloss/vim-javascript'
 " Plugin 'jaxbot/semantic-highlight.vim'
 Plugin 'gregsexton/matchtag'
 Plugin 'ecomba/vim-ruby-refactoring'
+Plugin 'mrdotb/vim-tailwindcss'
+Plugin 'jpalardy/vim-slime'
 call vundle#end()
 
 filetype plugin on
 syntax enable
 
 set number relativenumber
-" set list
-" set listchars=tab:>-
-" set listchars+=space:·
+set list
+set listchars=tab:>-
+set listchars+=space:·
 
 augroup numbertoggle
   autocmd!
@@ -100,9 +102,9 @@ set tabstop=2
 set expandtab
 set shiftwidth=2
 "set nosmartindent
-if has ("autocmd")
-  filetype indent on
-endif
+" if has ("autocmd")
+"   filetype indent on
+" endif
 
 set wrap
 set colorcolumn=120
@@ -147,8 +149,8 @@ map <Leader>t :call RunCurrentSpecFile()<CR>
 map <Leader>s :call RunNearestSpec()<CR>
 map <Leader>l :call RunLastSpec()<CR>
 map <Leader><c-a> :call RunAllSpecs()<CR>
-let g:rspec_runner = "os_x_iterm"
-let g:rspec_command = "!bundle exec rspec"
+" let g:rspec_runner = "os_x_iterm"
+" let g:rspec_command = "!bundle exec rspec"
 nnoremap <leader>a :RunSpecAll<CR>
 nnoremap <leader>r :RunSpec<CR>
 nnoremap <leader>l :RunSpecLine<CR>
@@ -264,6 +266,7 @@ nmap <silent> <leader>cn :ALENext<cr>
 nmap <silent> <leader>cp :ALEPrevious<cr>
 nnoremap <leader>wf :CtrlSF
 nnoremap <leader>d :ALEFix<cr>
+" nnoremap <leader>cm :exe "!tmux send -t 2 'echo " . line(".") . "' Enter"<cr>
 
 " Close html tag
 imap ,/ </<C-X><C-O>
@@ -285,3 +288,39 @@ let g:rails_projections = {
       \   ],
       \ }}
 
+" FuzzyFinder
+" -----------------------------------------------------------------------------
+function! FufSetIgnore()
+
+    let ignorefiles = [ $HOME . "/.gitignore", ".gitignore" ]
+    let exclude_vcs = '\.(hg|git|bzr|svn|cvs)'
+    let ignore = '\v\~$'
+
+    for ignorefile in ignorefiles
+
+        if filereadable(ignorefile)
+            for line in readfile(ignorefile)
+                if match(line, '^\s*$') == -1 && match(line, '^#') == -1
+                    let line = substitute(line, '^/', '', '')
+                    let line = substitute(line, '\.', '\\.', 'g')
+                    let line = substitute(line, '\*', '.*', 'g')
+                    let ignore .= '|^' . line
+                endif
+            endfor
+        endif
+
+        let ignore .= '|^' . exclude_vcs
+        let g:fuf_coveragefile_exclude = ignore
+        let g:fuf_file_exclude = ignore
+        let g:fuf_dir_exclude = ignore
+
+    endfor
+endfunction
+
+" Bonus: My custom key mappings for FuzzyFinder
+" Calls the function to set the exclude variables, then runs FuzzyFinder
+" nn <Tab>   :call FufSetIgnore() <BAR> :FufFile<CR>
+" nn <S-Tab> :call FufSetIgnore() <BAR> :FufFile **/<CR>
+" nn <F3>    :call FufSetIgnore() <BAR> :FufFile **/<CR>
+
+let g:slime_target = "tmux"
