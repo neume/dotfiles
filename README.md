@@ -1,37 +1,39 @@
 # Dotfiles
 These are my dotfiles.
 
-## Vim
-Install [vundler](https://github.com/VundleVim/Vundle.vim)
-
-Assuming you cloned this repo, append this in your `.vimrc`
+## Install
 
 
-```
-so $HOME/path/to/your/cloned/dotfiles/vim/vimrc.vim
-```
+```sh
+git clone https://github.com/VundleVim/Vundle.vim.git ~/.vim/bundle/Vundle.vim
 
-Install plugins via vundle
+git clone https://github.com/neume/dotfiles.git ~/dotfiles
 
-```
-:InstallPlugins
-```
 
-## Tmux
+touch ~/.vimrc
 
-This is for your `.tmux.conf` file
+echo 'so ~/dotfiles/vim/vimrc.vim' >> ~/.vimrc
+# or
+echo 'so ~/dotfiles/vim/mini.vim' >> ~/.vimrc
 
-```
-source-file $HOME/path/to/your/cloned/dotfiles/tmux/tmux.conf
+echo | vim +BundleInstall +qall
 ```
 
-Install tmux plugins
+```sh
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
+touch ~/.tmux.conf
+
+echo 'source-file ~/dotfiles/tmux/tmux.conf' >> ~/.tmux.conf
+# or
+echo 'source-file ~/dotfiles/tmux/mini.conf' >> ~/.tmux.conf
+
+~/.tmux/plugins/tpm/scripts/install_plugins.sh
+
+tmux
+
+# To install plugins, type:
+# Ctrl+b Shift+I
+# or
+# Ctrl+a Shift+I
 ```
-<leader-key>-I
-```
-That's `Ctrl-b` for leader key then `Shift-I`
-
-## Preview
-
-![vim-preview](images/vim-preview.png)
